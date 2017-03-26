@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>
+            canvas
+        </title>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="500" height="500">
+            您的浏览器不支持canvas！
+        </canvas>
+        <script type="text/javascript">
+
+            var canvas = document.getElementById("myCanvas")
+            var ctx = canvas.getContext("2d")
+            var image = new Image();
+
+            image.onload = function() {
+
+              canvas.width = image.width;
+              canvas.height = image.height;
+              console.log("ctx:  "+ctx)
+
+              canvas.getContext("2d").drawImage(image, 0, 0);
+              // 插入页面底部
+              document.body.appendChild(image);
+              // return canvas;
+              // 
+              var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              console.log("imageData:"+imageData)
+
+              ctx.putImageData(handleImg(imageData),0,0)
+              
+            }
+
+
+            image.src = 'img.png';
+
+
+            function handleImg(pixels) {
+
+                var d = pixels.data;
+
+                for (var i = 0; i < d.length; i += 4) {
+                  var r = d[i];
+                  var g = d[i + 1];
+                  var b = d[i + 2];
+                  d[i] = d[i + 1] = d[i + 2] = (r+g+b)/3;
+                }
+
+                return pixels;
+
+            };
+        </script>
+    </body>
+</html>
